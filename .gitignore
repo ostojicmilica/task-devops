@@ -1,0 +1,6 @@
+/.env
+/.idea
+/app/vendor
+/app/var
+/app/logs
+/logs
