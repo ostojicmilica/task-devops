@@ -1,0 +1,17 @@
+### Lumen ###
+public/storage
+public/hot
+storage/*.key
+.env.*.php
+.env.php
+.env
+Homestead.yaml
+Homestead.json
+/vendor
+/.idea
+.phpunit.result.cache
+
+### PhpStorm ###
+.idea/
+.idea/*
+*.iws
