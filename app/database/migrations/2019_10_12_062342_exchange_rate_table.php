@@ -13,7 +13,7 @@ class ExchangeRateTable extends Migration
      */
     public function up()
     {
-        Schema::create('exchange_rate', function (Blueprint $table) {
+        Schema::create('exchange_rates', function (Blueprint $table) {
             $table->increments('id');
             $table->string('base', 3);
             $table->date('rate_date');
@@ -29,6 +29,6 @@ class ExchangeRateTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exchange_rate');
+        Schema::dropIfExists('exchange_rates');
     }
 }

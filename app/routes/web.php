@@ -12,5 +12,14 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+//    return $router->app->version();
+//    $router->get('/', 'ExchangeRateApiController@index');
+    return 'Hello World';
 });
+
+$router->get('service', 'ExchangeRateApiController@index');
+
+//
+//$router->group(['prefix'=>'api/v1'], function() use($router){
+//    return 'Hello World Soheila';
+//});
