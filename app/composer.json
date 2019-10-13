@@ -6,9 +6,10 @@
     "type": "project",
     "require": {
         "php": "^7.2",
+        "ext-json": "*",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/lumen-framework": "^6.0",
-        "ext-json": "*"
+        "php-amqplib/php-amqplib": "^2.10"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",

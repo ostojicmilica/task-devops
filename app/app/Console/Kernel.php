@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\ExchangeRateCommand::class
+        Commands\ExchangeRateCommand::class,
+        Commands\DirectMqProducer::class,
     ];
 
     /**

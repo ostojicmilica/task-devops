@@ -16,7 +16,7 @@ class ExchangeRatesResource extends JsonResource
     {
         return [
             'base' => $this->base,
-            'rate_date' => $this->rate_date,
+            'rate_date' => $this->date,
             'rates' => $this->rates
         ];
     }

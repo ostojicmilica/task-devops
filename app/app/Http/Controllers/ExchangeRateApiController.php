@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Repositories\Eloquent\CountryExchangeRepository;
 use App\Services\ExchangeRateService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class ExchangeRateApiController extends Controller
 {
@@ -26,8 +28,6 @@ class ExchangeRateApiController extends Controller
 
     public function index()
     {
-        $exchange_rates = $this->apiExchange->getLatestRates();
-        $this->repo->create($exchange_rates);
-        dd(($exchange_rates));
+        Artisan::call('direct:publisher', ['message' => 'hi soheila']);
     }
 }
