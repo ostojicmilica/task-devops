@@ -28,6 +28,6 @@ class ExchangeRateApiController extends Controller
 
     public function index()
     {
-        Artisan::call('direct:publisher', ['message' => 'hi soheila']);
+        echo 'hi';
     }
 }

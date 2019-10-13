@@ -61,9 +61,10 @@ $app->singleton(
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
+ $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+     'BasicAuth' => App\Http\Middleware\BasicAuthMiddleware::class,
+ ]);
 
 /*
 |--------------------------------------------------------------------------
@@ -75,8 +76,7 @@ $app->singleton(
 | totally optional, so you are not required to uncomment this line.
 |
 */
-//$app->configure('amqp');
-//$app->register(Bschmitt\Amqp\LumenServiceProvider::class);
+
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);

@@ -29,4 +29,8 @@ $router->get('service', function () {
 //
 //$router->group(['prefix'=>'api/v1'], function() use($router){
 //    return 'Hello World Soheila';
-//});
+//}
+
+$router->group(['middleware' => 'BasicAuth', 'prefix'=>'api/v1'], function () use ($router) {
+    $router->get('foo', 'ExchangeRateApiController@index');
+});
