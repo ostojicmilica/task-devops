@@ -19,6 +19,7 @@ class ExchangeRateTable extends Migration
             $table->date('rate_date');
             $table->json('rates');
             $table->timestamps();
+            $table->index('rate_date');
         });
     }
 

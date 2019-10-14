@@ -33,11 +33,22 @@ class ExchangeRateCommand extends Command
     public function handle(ExchangeRateService $apiExchange, CountryExchangeRepository $repo)
     {
         try {
-            $exchange_rates = $apiExchange->getLatestRates();
-            $repo->create($exchange_rates);
-            $this->info("exchange rates imported successfully");
+            [$apiResult, $rateToCheck] = $apiExchange->getLatestRates();
+            if (!empty($apiResult)) {
+                $record = $repo->firstOrCreate(['rate_date' => $apiResult['rate_date'], 'rates->USD' => $rateToCheck], $apiResult);
+                $wasCreated = $record->wasRecentlyCreated;
+                if ($wasCreated) {
+                    // we have new rate for USD, inform services via rabbit
+                    $this->call('direct:publisher', [
+                        'message' => $rateToCheck
+                    ]);
+                    $this->info('exchange rates imported successfully');
+                }
+            } else
+                $this->info('no exchange rates to import');
+
         } catch (Exception $e) {
-            $this->error("error occurred on getting exchange rates");
+            $this->error(sprintf('error occurred on getting exchange rates, [%s]', $e->getMessage()));
         }
     }
 }

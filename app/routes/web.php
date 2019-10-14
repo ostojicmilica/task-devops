@@ -23,7 +23,6 @@ $router->get('service', function () {
     ]);
 });
 
-
 $router->group(['middleware' => 'BasicAuth', 'prefix' => 'api/v1'], function () use ($router) {
     $router->get('/rate/', 'ExchangeRateApiController@getRate');
 });

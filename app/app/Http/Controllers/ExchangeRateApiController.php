@@ -40,7 +40,7 @@ class ExchangeRateApiController extends Controller
     {
         $date = $this->getDate($request->input('date'));
         $this->validateInput($request, $date);
-        $exchange_rate = $this->repo->findWhereFirst('rate_date', $this->carbonDate($date)->format('Y-m-d'));
+        $exchange_rate = $this->repo->findWhereLast('rate_date', $this->carbonDate($date)->format('Y-m-d'));
         if ($exchange_rate)
             return response()->json($exchange_rate);
         else

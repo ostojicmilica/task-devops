@@ -32,6 +32,16 @@ class CountryExchangeRepository
     }
 
     /**
+     * @param array $attributes
+     * @param array $values
+     * @return mixed
+     */
+    public function firstOrCreate(array $attributes, array $values = [])
+    {
+        return $this->entity->firstOrCreate($attributes, $values);
+    }
+
+    /**
      * @param $id
      * @param array $properties
      * @return mixed
@@ -69,6 +79,7 @@ class CountryExchangeRepository
     /**
      * @param $column
      * @param $value
+     * @param null $paginate
      * @return mixed
      */
     public function findWhere($column, $value, $paginate = null)
@@ -82,7 +93,7 @@ class CountryExchangeRepository
      * @param $value
      * @return mixed
      */
-    public function findWhereFirst($column, $value)
+    public function findWhereLast($column, $value)
     {
         $model = $this->entity->where($column, $value);
         if (!$model) {
@@ -90,7 +101,7 @@ class CountryExchangeRepository
                 get_class($this->entity->getModel())
             );
         }
-        return $model->first();
+        return $model->latest('id')->first();
     }
 
 }
