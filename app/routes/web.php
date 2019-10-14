@@ -11,16 +11,8 @@
 |
 */
 
-use Illuminate\Support\Facades\Artisan;
-
 $router->get('/', function () use ($router) {
     return 'Hello Travian';
-});
-
-$router->get('service', function () {
-    $exitCode = Artisan::call('direct:publisher', [
-        'message' => 'hello soley'
-    ]);
 });
 
 $router->group(['middleware' => 'BasicAuth', 'prefix' => 'api/v1'], function () use ($router) {
