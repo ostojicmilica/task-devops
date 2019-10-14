@@ -25,8 +25,6 @@ class DirectMqProducer extends Command
             /* @var \PhpAmqpLib\Channel\AMQPChannel $channel */
             [$connection, $channel] = $this->setup();
             $channel->queue_declare('exchange-queue', false, false, false, false);
-//        $channel->exchange_declare($ex, 'direct', false, true, false);
-//        $channel->basic_publish($message, $ex, $r);
             $channel->basic_publish($message, '', 'hello2');
             $channel->close();
             $connection->close();
