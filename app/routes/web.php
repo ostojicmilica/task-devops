@@ -14,23 +14,16 @@
 use Illuminate\Support\Facades\Artisan;
 
 $router->get('/', function () use ($router) {
-//    return $router->app->version();
-//    $router->get('/', 'ExchangeRateApiController@index');
-    return 'Hello World';
+    return 'Hello Travian';
 });
 
-//$router->get('service', 'ExchangeRateApiController@index');
 $router->get('service', function () {
     $exitCode = Artisan::call('direct:publisher', [
         'message' => 'hello soley'
     ]);
 });
 
-//
-//$router->group(['prefix'=>'api/v1'], function() use($router){
-//    return 'Hello World Soheila';
-//}
 
-$router->group(['middleware' => 'BasicAuth', 'prefix'=>'api/v1'], function () use ($router) {
-    $router->get('foo', 'ExchangeRateApiController@index');
+$router->group(['middleware' => 'BasicAuth', 'prefix' => 'api/v1'], function () use ($router) {
+    $router->get('/rate/', 'ExchangeRateApiController@getRate');
 });

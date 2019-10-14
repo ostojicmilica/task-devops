@@ -66,4 +66,31 @@ class CountryExchangeRepository
         return $model;
     }
 
+    /**
+     * @param $column
+     * @param $value
+     * @return mixed
+     */
+    public function findWhere($column, $value, $paginate = null)
+    {
+        $query = $this->entity->where($column, $value);
+        return $this->processPagination($query, $paginate);
+    }
+
+    /**
+     * @param $column
+     * @param $value
+     * @return mixed
+     */
+    public function findWhereFirst($column, $value)
+    {
+        $model = $this->entity->where($column, $value);
+        if (!$model) {
+            throw (new ModelNotFoundException)->setModel(
+                get_class($this->entity->getModel())
+            );
+        }
+        return $model->first();
+    }
+
 }
