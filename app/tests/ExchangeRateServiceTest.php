@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 
-class ExchangeRateServiceT extends TestCase
+class ExchangeRateServiceTest extends TestCase
 {
     protected $apiClient;
 
@@ -28,12 +28,12 @@ class ExchangeRateServiceT extends TestCase
         $this->apiClient = null;
     }
 
-
     public function testExchangeService()
     {
-        $this->mockHandler->append(new Response(200, [], file_get_contents(__DIR__ . '/fixtures/exchange.json')));
+        $body = file_get_contents(__DIR__ . '/fixtures/exchange.json');
+        $this->mockHandler->append(new Response(200, [], $body));
 
         $response = $this->apiClient->getLatestRates();
-        $this->assertEquals(file_get_contents(__DIR__ . '/fixtures/exchange.json'), $response);
+        $this->assertEquals($body, $response);
     }
 }

@@ -3,7 +3,7 @@
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class ExchangeRateApiTest extends TestCase
+class ExchangeRateCommandTest extends TestCase
 {
 
     public function testExchangeApiSuccess()

@@ -34,10 +34,12 @@ class ExchangeRateCommand extends Command
     public function handle(ExchangeRateService $apiExchange, CountryExchangeRepository $repo)
     {
         try {
-            $apiResult = $apiExchange->getLatestRates();
-            if (!empty($apiResult)) {
-                $rates = json_decode($apiResult['rates'], true);
-                $record = $repo->firstOrCreate(['rate_date' => $apiResult['rate_date'], 'rates->USD' => $rates['USD']], $apiResult);
+            $apiResponse = $apiExchange->getLatestRates();
+            if (!empty($apiResponse)) {
+                $response = $this->responseHandler($apiResponse);
+                $rates = json_decode($response['rates'], true);
+                $record = $repo->firstOrCreate(['rate_date' => $response['rate_date'],
+                                                'rates->USD' => $rates['USD']], $response);
                 $wasCreated = $record->wasRecentlyCreated;
                 if ($wasCreated) {
                     // we have new rate for USD, inform services via rabbit
@@ -45,7 +47,7 @@ class ExchangeRateCommand extends Command
                         'message' => $rates['USD']
                     ]);
                     // update cache values
-                    $this->setCache($apiResult['rate_date'], $rates);
+                    $this->setCache($response['rate_date'], $rates);
                     $this->info('exchange rates imported successfully');
                 }
             } else
@@ -60,5 +62,18 @@ class ExchangeRateCommand extends Command
         foreach ($rates as $k=>$v) {
             Redis::hset($date, $k, $v);
         }
+    }
+
+    private function responseHandler($response)
+    {
+        if ($response) {
+            $result = json_decode($response, true);
+            return [
+                'base' => $result['base'],
+                'rate_date' => $result['date'],
+                'rates' => json_encode($result['rates']),
+            ];
+        }
+        return [];
     }
 }
