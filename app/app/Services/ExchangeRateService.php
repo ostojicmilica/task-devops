@@ -43,11 +43,11 @@ class ExchangeRateService
     {
         if ($response) {
             $result = json_decode($response, true);
-            return [[
+            return [
                 'base' => $result['base'],
                 'rate_date' => $result['date'],
                 'rates' => json_encode($result['rates']),
-            ], $result['rates']['USD']];
+            ];
         }
         return [];
     }

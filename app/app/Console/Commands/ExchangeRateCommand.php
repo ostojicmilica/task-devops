@@ -6,6 +6,7 @@ use App\Repositories\Eloquent\CountryExchangeRepository;
 use App\Services\ExchangeRateService;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Redis;
 
 class ExchangeRateCommand extends Command
 {
@@ -25,7 +26,7 @@ class ExchangeRateCommand extends Command
 
 
     /**
-     * Execute the console command.
+     * Execute the command for fetching latest exchange rate from third part api.
      *
      * @param ExchangeRateService $apiExchange
      * @param CountryExchangeRepository $repo
@@ -33,15 +34,18 @@ class ExchangeRateCommand extends Command
     public function handle(ExchangeRateService $apiExchange, CountryExchangeRepository $repo)
     {
         try {
-            [$apiResult, $rateToCheck] = $apiExchange->getLatestRates();
+            $apiResult = $apiExchange->getLatestRates();
             if (!empty($apiResult)) {
-                $record = $repo->firstOrCreate(['rate_date' => $apiResult['rate_date'], 'rates->USD' => $rateToCheck], $apiResult);
+                $rates = json_decode($apiResult['rates'], true);
+                $record = $repo->firstOrCreate(['rate_date' => $apiResult['rate_date'], 'rates->USD' => $rates['USD']], $apiResult);
                 $wasCreated = $record->wasRecentlyCreated;
                 if ($wasCreated) {
                     // we have new rate for USD, inform services via rabbit
                     $this->call('direct:publisher', [
-                        'message' => $rateToCheck
+                        'message' => $rates['USD']
                     ]);
+                    // update cache values
+                    $this->setCache($apiResult['rate_date'], $rates);
                     $this->info('exchange rates imported successfully');
                 }
             } else
@@ -49,6 +53,12 @@ class ExchangeRateCommand extends Command
 
         } catch (Exception $e) {
             $this->error(sprintf('error occurred on getting exchange rates, [%s]', $e->getMessage()));
+        }
+    }
+
+    private function setCache($date, $rates){
+        foreach ($rates as $k=>$v) {
+            Redis::hset($date, $k, $v);
         }
     }
 }
